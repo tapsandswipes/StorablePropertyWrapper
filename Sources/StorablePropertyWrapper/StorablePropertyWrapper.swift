@@ -41,7 +41,7 @@ struct Storable<T: StorableValue> {
         self.willChangeNotification = Notification.Name(notificationsPrefix + key.capitalizingFirstLetter() + "WillChange")
         self.didChangeNotification = Notification.Name(notificationsPrefix + key.capitalizingFirstLetter() + "DidChange")
         if let store = store as? SupportsDefaultValues {
-            store.registerDefault(value, forKey: key)
+            store.registerDefault(value.to(), forKey: key)
         }
     }
     

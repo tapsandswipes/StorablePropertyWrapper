@@ -1,6 +1,12 @@
 import XCTest
 @testable import StorablePropertyWrapper
 
+enum TestEnum: String, StorableValue {
+    case value1
+    case value2
+}
+
+
 final class StorablePropertyWrapperTests: XCTestCase {
         
     @Storable(key: "TestString", default: "", store: UserDefaults.standard)
@@ -24,6 +30,9 @@ final class StorablePropertyWrapperTests: XCTestCase {
     @Storable(key: "TestTheURL", default: URL(string: "www.example.com")!, store: UserDefaults.standard)
     var theUrl: URL
 
+    @Storable(key: "TestEnum", default: .value1, store: UserDefaults.standard)
+    var theEnum: TestEnum
+    
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
@@ -110,6 +119,13 @@ final class StorablePropertyWrapperTests: XCTestCase {
         
         $theUrl.remove()
         XCTAssertEqual(theUrl, URL(string: "www.example.com")!)
+    }
+    
+    func testEnum() {
+        XCTAssertEqual(theEnum, .value1)
+
+        theEnum = .value2
+        XCTAssertEqual(theEnum, .value2)
     }
     
     func testNil() {
