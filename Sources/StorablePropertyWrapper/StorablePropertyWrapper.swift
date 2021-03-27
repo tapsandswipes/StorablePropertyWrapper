@@ -40,6 +40,9 @@ struct Storable<T: StorableValue> {
         self.store = store
         self.willChangeNotification = Notification.Name(notificationsPrefix + key.capitalizingFirstLetter() + "WillChange")
         self.didChangeNotification = Notification.Name(notificationsPrefix + key.capitalizingFirstLetter() + "DidChange")
+        if let store = store as? SupportsDefaultValues {
+            store.registerDefault(value, forKey: key)
+        }
     }
     
     public
@@ -53,8 +56,12 @@ struct Storable<T: StorableValue> {
 
 /// For testing purposes
 extension Storable {
+    /// Get the value directly from the store without going through the wrappedValue
     func storedValue() -> Any? {
-        return (store.get(key) as T.ValueToStore?)
+        guard let v: T.ValueToStore = store.get(key) else { return nil }
+        
+        // The forced cast is needed to avoid wrapping v inside another Optional
+        return v as! Any?
     }
 }
 

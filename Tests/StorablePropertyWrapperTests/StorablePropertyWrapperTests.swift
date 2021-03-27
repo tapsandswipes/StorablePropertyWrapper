@@ -90,14 +90,25 @@ final class StorablePropertyWrapperTests: XCTestCase {
         XCTAssertNil(date)
     }
     
-    func testRemove() {
+    func testRemoveKeepDefault() {
         string = "Test"
         XCTAssertNotNil($string.storedValue())
         
         $string.remove()
-        XCTAssertNil($string.storedValue())
+        XCTAssertEqual(string, $string.default)
+        XCTAssertNotNil($string.storedValue())
     }
 
+    func testRemove() {
+        date = Date()
+        
+        XCTAssertNotNil($date.storedValue())
+
+        $date.remove()
+        XCTAssertNil(date)
+        XCTAssertNil($date.storedValue())
+    }
+    
     static var allTests = [
         ("testString", testString),
         ("testDate", testDate),
