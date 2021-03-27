@@ -18,6 +18,12 @@ final class StorablePropertyWrapperTests: XCTestCase {
     @Storable(key: "TestDictionary", default: nil, store: UserDefaults.standard)
     var dict: Dictionary<String, Date>?
 
+    @Storable(key: "TestURL", default: nil, store: UserDefaults.standard)
+    var url: URL?
+
+    @Storable(key: "TestTheURL", default: URL(string: "www.example.com")!, store: UserDefaults.standard)
+    var theUrl: URL
+
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
@@ -29,6 +35,8 @@ final class StorablePropertyWrapperTests: XCTestCase {
         UserDefaults.standard.removeObject(forKey: "TestCodable")
         UserDefaults.standard.removeObject(forKey: "TestArray")
         UserDefaults.standard.removeObject(forKey: "TestDictionary")
+        UserDefaults.standard.removeObject(forKey: "TestURL")
+        UserDefaults.standard.removeObject(forKey: "TestTheURL")
     }
 
     func testString() throws {
@@ -69,6 +77,16 @@ final class StorablePropertyWrapperTests: XCTestCase {
         XCTAssertNotNil($dict.storedValue())
     }
     
+    func testURL() {
+        XCTAssertNil(url)
+        
+        let u = URL(string: "http://www.tapsandswipes.com/")
+        url = u
+        
+        XCTAssertEqual(url, u)
+        XCTAssertNotNil($url.storedValue())
+    }
+    
     func testCodable() {
         XCTAssertNil(codableStruct)
         
@@ -80,6 +98,18 @@ final class StorablePropertyWrapperTests: XCTestCase {
         XCTAssertEqual(codableStruct?.name, "hi")
         XCTAssertEqual(codableStruct?.date, now)
         XCTAssertNotNil($codableStruct.storedValue())
+    }
+    
+    func testNotNilURL() {
+        XCTAssertEqual(theUrl, URL(string: "www.example.com")!)
+        
+        let u: URL = URL(string: "www.tapsandswipes.com")!
+        theUrl = u
+        XCTAssertEqual(theUrl, u)
+        XCTAssertNotNil($theUrl.storedValue())
+        
+        $theUrl.remove()
+        XCTAssertEqual(theUrl, URL(string: "www.example.com")!)
     }
     
     func testNil() {

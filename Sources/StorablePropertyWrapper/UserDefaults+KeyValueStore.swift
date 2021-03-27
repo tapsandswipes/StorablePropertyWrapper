@@ -16,13 +16,25 @@ extension UserDefaults: KeyStore {
         if let optional = value as? AnyOptional, optional.isNil {
             removeObject(forKey: key)
         } else {
+            if T.self == URL.self {
+                self.set(value as? URL, forKey: key)
+            } else if T.self == Optional<URL>.self, let v = value as? URL {
+                self.set(v as URL?, forKey: key)
+            } else {
                 self.set(value as Any?, forKey: key)
+            }
         }
     }
     
     public
     func get<T>(_ key: String) -> T? {
+        if T.self == URL.self {
+            return url(forKey: key) as! T?
+        } else if T.self == Optional<URL>.self {
+            return url(forKey: key) as! T?
+        } else {
             return object(forKey: key) as? T
+        }
     }
     
     public
