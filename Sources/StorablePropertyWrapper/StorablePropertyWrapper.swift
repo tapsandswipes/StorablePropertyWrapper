@@ -98,7 +98,7 @@ extension UInt16: StorableValue { }
 extension UInt32: StorableValue { }
 extension UInt64: StorableValue { }
 extension URL: StorableValue { }
-extension Dictionary: StorableValue where Key: StorableValue, Key.ValueToStore == Key, Value: StorableValue, Value.ValueToStore == Value {}
+extension Dictionary: StorableValue where Key == String, Value: StorableValue, Value.ValueToStore == Value {}
 
 extension StorableValue where Self: RawRepresentable, Self.RawValue: StorableValue {
     public func to() -> Self.RawValue.ValueToStore { rawValue.to() }
