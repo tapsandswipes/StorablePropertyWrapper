@@ -1,11 +1,6 @@
 import XCTest
 @testable import StorablePropertyWrapper
 
-enum TestEnum: String, StorableValue {
-    case value1
-    case value2
-}
-
 
 final class StorablePropertyWrapperTests: XCTestCase {
         
@@ -184,3 +179,11 @@ struct CodableStruct: Codable, Equatable {
 }
 
 extension CodableStruct: StorableCodableValue {}
+
+enum TestEnum: String {
+    case value1
+    case value2
+}
+
+extension TestEnum: StorableValue {}
+
