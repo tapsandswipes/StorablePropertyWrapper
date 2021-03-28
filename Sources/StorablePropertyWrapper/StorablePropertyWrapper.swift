@@ -115,6 +115,10 @@ extension Array: StorableValue where Element: StorableValue {
     public static func from(_ v: [Element.ValueToStore]) -> Self { v.map(Element.from) }
 }
 
+extension Set: StorableValue where Element: StorableValue {
+    public func to() -> [Element.ValueToStore] { map({$0.to()}) }
+    public static func from(_ v: [Element.ValueToStore]) -> Self { Self.init(v.map(Element.from)) }
+}
 
 public
 protocol StorableCodableValue: Codable, StorableValue where ValueToStore == Data { }

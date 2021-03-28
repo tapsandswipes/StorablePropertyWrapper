@@ -24,11 +24,14 @@ final class StorablePropertyWrapperTests: XCTestCase {
     @Storable(key: "TestDictionary", default: nil, store: UserDefaults.standard)
     var dict: Dictionary<String, Date>?
 
+    @Storable(key: "TestSet", default: nil, store: UserDefaults.standard)
+    var set: Set<String>?
+
     @Storable(key: "TestURL", default: nil, store: UserDefaults.standard)
     var url: URL?
 
-    @Storable(key: "TestTheURL", default: URL(string: "www.example.com")!, store: UserDefaults.standard)
-    var theUrl: URL
+    @Storable(key: "TestAURL", default: URL(string: "www.example.com")!, store: UserDefaults.standard)
+    var aUrl: URL
 
     @Storable(key: "TestEnum", default: .value1, store: UserDefaults.standard)
     var theEnum: TestEnum
@@ -44,8 +47,10 @@ final class StorablePropertyWrapperTests: XCTestCase {
         UserDefaults.standard.removeObject(forKey: "TestCodable")
         UserDefaults.standard.removeObject(forKey: "TestArray")
         UserDefaults.standard.removeObject(forKey: "TestDictionary")
+        UserDefaults.standard.removeObject(forKey: "TestSet")
         UserDefaults.standard.removeObject(forKey: "TestURL")
-        UserDefaults.standard.removeObject(forKey: "TestTheURL")
+        UserDefaults.standard.removeObject(forKey: "TestAURL")
+        UserDefaults.standard.removeObject(forKey: "TestEnum")
     }
 
     func testString() throws {
@@ -86,6 +91,16 @@ final class StorablePropertyWrapperTests: XCTestCase {
         XCTAssertNotNil($dict.storedValue())
     }
     
+    func testSet() throws {
+        XCTAssertNil(set)
+        
+        let s: Set<String> = ["A", "B"]
+        set = s
+        
+        XCTAssertEqual(set, s)
+        XCTAssertNotNil($set.storedValue())
+    }
+    
     func testURL() {
         XCTAssertNil(url)
         
@@ -110,15 +125,15 @@ final class StorablePropertyWrapperTests: XCTestCase {
     }
     
     func testNotNilURL() {
-        XCTAssertEqual(theUrl, URL(string: "www.example.com")!)
+        XCTAssertEqual(aUrl, URL(string: "www.example.com")!)
         
         let u: URL = URL(string: "www.tapsandswipes.com")!
-        theUrl = u
-        XCTAssertEqual(theUrl, u)
-        XCTAssertNotNil($theUrl.storedValue())
+        aUrl = u
+        XCTAssertEqual(aUrl, u)
+        XCTAssertNotNil($aUrl.storedValue())
         
-        $theUrl.remove()
-        XCTAssertEqual(theUrl, URL(string: "www.example.com")!)
+        $aUrl.remove()
+        XCTAssertEqual(aUrl, URL(string: "www.example.com")!)
     }
     
     func testEnum() {
