@@ -1,4 +1,5 @@
 import XCTest
+import Foundation
 @testable import StorablePropertyWrapper
 
 
@@ -31,6 +32,9 @@ final class StorablePropertyWrapperTests: XCTestCase {
     @Storable(key: "TestEnum", default: .value1, store: UserDefaults.standard)
     var theEnum: TestEnum
     
+    @Storable(key: "TestString2", default: nil, store: UserDefaults.standard)
+    var string2: String?
+
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
@@ -163,6 +167,19 @@ final class StorablePropertyWrapperTests: XCTestCase {
         $date.remove()
         XCTAssertNil(date)
         XCTAssertNil($date.storedValue())
+    }
+    
+    func testNotification() {
+        let expectation = XCTestExpectation(description: "notification")
+        let token = NotificationCenter.default.addObserver(forName: $string2.didChangeNotification, object: nil, queue: .main) { [unowned self] _ in
+            XCTAssertEqual(self.string2, "Test")
+            expectation.fulfill()
+        }
+        
+        withExtendedLifetime(token) {
+            self.string2 = "Test"
+            wait(for: [expectation], timeout: 2)
+        }
     }
     
     static var allTests = [

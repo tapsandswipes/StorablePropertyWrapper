@@ -22,9 +22,13 @@ struct Storable<T: StorableValue> {
     var wrappedValue: T {
         get { return store.get(key).map(T.from) ?? self.default }
         set {
-            NotificationCenter.default.post(name: willChangeNotification, object: self)
+            DispatchQueue.main.async { [self] in
+                NotificationCenter.default.post(name: willChangeNotification, object: self)
+            }
             store.set(newValue.to(), forKey: key)
-            NotificationCenter.default.post(name: didChangeNotification, object: self)
+            DispatchQueue.main.async { [self] in
+                NotificationCenter.default.post(name: didChangeNotification, object: self)
+            }
         }
     }
     
