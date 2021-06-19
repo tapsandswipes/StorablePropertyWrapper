@@ -63,6 +63,10 @@ extension Storable {
         guard let v: T.ValueToStore = store.get(key) else { return nil }
         
         // The forced cast is needed to avoid wrapping v inside another Optional
+        #if swift(<5.5)
         return v as! Any?
+        #else
+        return v
+        #endif
     }
 }
