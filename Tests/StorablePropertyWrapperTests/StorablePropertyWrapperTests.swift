@@ -67,7 +67,7 @@ final class StorablePropertyWrapperTests: XCTestCase {
         date = now
         
         XCTAssertEqual(date, now)
-        XCTAssertNotNil($date.storedValue())
+        XCTAssertNotNil($date.storedValue()!)
     }
     
     func testArray() throws {
@@ -77,7 +77,7 @@ final class StorablePropertyWrapperTests: XCTestCase {
         array = a
         
         XCTAssertEqual(array, a)
-        XCTAssertNotNil($array.storedValue())
+        XCTAssertNotNil($array.storedValue()!)
     }
     
     func testDictionary() {
@@ -87,7 +87,7 @@ final class StorablePropertyWrapperTests: XCTestCase {
         dict = d
         
         XCTAssertEqual(dict, d)
-        XCTAssertNotNil($dict.storedValue())
+        XCTAssertNotNil($dict.storedValue()!)
     }
     
     func testSet() throws {
@@ -97,7 +97,7 @@ final class StorablePropertyWrapperTests: XCTestCase {
         set = s
         
         XCTAssertEqual(set, s)
-        XCTAssertNotNil($set.storedValue())
+        XCTAssertNotNil($set.storedValue()!)
     }
     
     func testURL() {
@@ -107,7 +107,7 @@ final class StorablePropertyWrapperTests: XCTestCase {
         url = u
         
         XCTAssertEqual(url, u)
-        XCTAssertNotNil($url.storedValue())
+        XCTAssertNotNil($url.storedValue()!)
     }
     
     func testCodable() {
@@ -120,7 +120,7 @@ final class StorablePropertyWrapperTests: XCTestCase {
         XCTAssertEqual(codableStruct, cs)
         XCTAssertEqual(codableStruct?.name, "hi")
         XCTAssertEqual(codableStruct?.date, now)
-        XCTAssertNotNil($codableStruct.storedValue())
+        XCTAssertNotNil($codableStruct.storedValue()!)
     }
     
     func testNotNilURL() {
@@ -144,7 +144,7 @@ final class StorablePropertyWrapperTests: XCTestCase {
     
     func testNil() {
         date = Date()
-        XCTAssertNotNil($date.storedValue())
+        XCTAssertNotNil($date.storedValue()!)
 
         date = nil
         XCTAssertNil(date)
@@ -162,11 +162,11 @@ final class StorablePropertyWrapperTests: XCTestCase {
     func testRemove() {
         date = Date()
         
-        XCTAssertNotNil($date.storedValue())
+        XCTAssertNotNil($date.storedValue()!)
 
         $date.remove()
         XCTAssertNil(date)
-        XCTAssertNil($date.storedValue())
+        XCTAssertNil($date.storedValue()!)
     }
     
     func testNotification() {
@@ -204,3 +204,11 @@ enum TestEnum: String {
 
 extension TestEnum: StorableValue {}
 
+extension Storable {
+    /// Get the value directly from the store without going through the wrappedValue
+    func storedValue() -> T.ValueToStore? {
+        guard let v: T.ValueToStore = store.get(key) else { return nil }
+        
+        return v
+    }
+}

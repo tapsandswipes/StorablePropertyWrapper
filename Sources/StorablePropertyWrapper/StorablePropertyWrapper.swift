@@ -10,16 +10,13 @@ import Foundation
 @propertyWrapper public
 struct Storable<T: StorableValue> {
     public let `default`: T
-    private let key: String
-    private let store: KeyStore
+    internal let key: String
+    internal let store: KeyStore
     
-    public
-    let willChangeNotification: Notification.Name
-    public
-    let didChangeNotification: Notification.Name
+    public let willChangeNotification: Notification.Name
+    public let didChangeNotification: Notification.Name
 
-    public
-    var wrappedValue: T {
+    public var wrappedValue: T {
         get { return store.get(key).map(T.from) ?? self.default }
         set {
             NotificationCenter.default.post(name: willChangeNotification, object: self)
@@ -30,8 +27,7 @@ struct Storable<T: StorableValue> {
         }
     }
     
-    public
-    var projectedValue: Storable<T> {
+    public var projectedValue: Storable<T> {
         return self
     }
     
@@ -54,19 +50,4 @@ struct Storable<T: StorableValue> {
         NotificationCenter.default.post(name: didChangeNotification, object: self)
     }
     
-}
-
-/// For testing purposes
-extension Storable {
-    /// Get the value directly from the store without going through the wrappedValue
-    func storedValue() -> Any? {
-        guard let v: T.ValueToStore = store.get(key) else { return nil }
-        
-        // The forced cast is needed to avoid wrapping v inside another Optional
-        #if swift(<5.5)
-        return v as! Any?
-        #else
-        return v
-        #endif
-    }
 }
