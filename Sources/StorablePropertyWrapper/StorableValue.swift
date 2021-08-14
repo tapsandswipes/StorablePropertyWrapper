@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Codextended
 
 
 /// This must be implemented by all the types that must be stored in UserDefaults
