@@ -10,7 +10,7 @@ import Foundation
 
 /// Protocol acting as a common API for all types of encoders,
 /// such as `JSONEncoder` and `PropertyListEncoder`.
-protocol AnyEncoder {
+public protocol AnyEncoder {
     /// Encode a given value into binary data.
     func encode<T: Encodable>(_ value: T) throws -> Data
 }
@@ -34,7 +34,7 @@ extension Encodable {
 
 /// Protocol acting as a common API for all types of decoders,
 /// such as `JSONDecoder` and `PropertyListDecoder`.
-protocol AnyDecoder {
+public protocol AnyDecoder {
     /// Decode a value of a given type from binary data.
     func decode<T: Decodable>(_ type: T.Type, from data: Data) throws -> T
 }

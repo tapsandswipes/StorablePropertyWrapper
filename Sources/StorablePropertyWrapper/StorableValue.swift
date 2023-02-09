@@ -68,10 +68,16 @@ extension Set: StorableValue where Element: StorableValue {
 }
 
 public
-protocol StorableCodableValue: Codable, StorableValue where ValueToStore == Data { }
+protocol StorableCodableValue: Codable, StorableValue where ValueToStore == Data {
+    static var encoder: AnyEncoder { get }
+    static var decoder: AnyDecoder { get }
+}
 
 extension StorableCodableValue {
-    public func to() -> Data { return try! self.encoded() }
-    public static func from(_ v: Data) -> Self { return try! v.decoded() }
+    static var encoder: AnyEncoder { JSONEncoder() }
+    static var decoder: AnyDecoder { JSONDecoder() }
+
+    public func to() -> Data { return try! self.encoded(using: Self.encoder) }
+    public static func from(_ v: Data) -> Self { return try! v.decoded(using: Self.decoder) }
     
 }
