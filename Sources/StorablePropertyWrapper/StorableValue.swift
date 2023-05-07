@@ -74,8 +74,8 @@ protocol StorableCodableValue: Codable, StorableValue where ValueToStore == Data
 }
 
 extension StorableCodableValue {
-    static var encoder: AnyEncoder { JSONEncoder() }
-    static var decoder: AnyDecoder { JSONDecoder() }
+    public static var encoder: AnyEncoder { JSONEncoder() }
+    public static var decoder: AnyDecoder { JSONDecoder() }
 
     public func to() -> Data { return try! self.encoded(using: Self.encoder) }
     public static func from(_ v: Data) -> Self { return try! v.decoded(using: Self.decoder) }
