@@ -45,6 +45,12 @@ extension UserDefaults: KeyStore {
     
 }
 
+#if compiler(>=5.8) && hasFeature(RetroactiveAttribute)
+extension UserDefaults: @retroactive @unchecked Sendable {}
+#else
+extension UserDefaults: @unchecked Sendable {}
+#endif
+
 extension UserDefaults: SupportsDefaultValues {
     public
     func registerDefault<T>(_ value: T, forKey key: String) {

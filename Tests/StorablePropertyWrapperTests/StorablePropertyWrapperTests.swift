@@ -171,8 +171,7 @@ final class StorablePropertyWrapperTests: XCTestCase {
     
     func testNotification() {
         let expectation = XCTestExpectation(description: "notification")
-        let token = NotificationCenter.default.addObserver(forName: $string2.didChangeNotification, object: nil, queue: .main) { [unowned self] _ in
-            XCTAssertEqual(self.string2, "Test")
+        let token = NotificationCenter.default.addObserver(forName: $string2.didChangeNotification, object: nil, queue: .main) { _ in
             expectation.fulfill()
         }
         
@@ -180,13 +179,9 @@ final class StorablePropertyWrapperTests: XCTestCase {
             self.string2 = "Test"
             wait(for: [expectation], timeout: 2)
         }
-    }
-    
-    static var allTests = [
-        ("testString", testString),
-        ("testDate", testDate),
-        ("testCodable", testCodable),
-    ]
+        
+        XCTAssertEqual(self.string2, "Test")
+    }    
 }
 
 

@@ -8,7 +8,7 @@ import Foundation
 
 
 public
-protocol KeyStore {
+protocol KeyStore: Sendable {
     func set<T>(_ value: T, forKey key: String)
     func get<T>(_ key: String) -> T?
     func remove(_ key: String)

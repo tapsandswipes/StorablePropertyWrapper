@@ -8,7 +8,7 @@ import Foundation
 
 
 @propertyWrapper public
-struct Storable<T: StorableValue> {
+struct Storable<T: StorableValue>: Sendable {
     public let `default`: T
     internal let key: String
     internal let store: KeyStore
@@ -19,10 +19,10 @@ struct Storable<T: StorableValue> {
     public var wrappedValue: T {
         get { return store.get(key).map(T.from) ?? self.default }
         set {
-            NotificationCenter.default.post(name: willChangeNotification, object: self)
+            NotificationCenter.default.post(name: willChangeNotification, object: nil)
             store.set(newValue.to(), forKey: key)
-            DispatchQueue.main.async { [self] in
-                NotificationCenter.default.post(name: didChangeNotification, object: self)
+            DispatchQueue.main.async { [didChangeNotification] in
+                NotificationCenter.default.post(name: didChangeNotification, object: nil)
             }
         }
     }

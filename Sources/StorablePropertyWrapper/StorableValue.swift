@@ -12,7 +12,7 @@ import Foundation
 /// Most of the types can be directly stored but some of them, like enums, can't and
 /// we must implement this protocol to conver to/from a storable value
 public
-protocol StorableValue {
+protocol StorableValue: Sendable {
     associatedtype ValueToStore = Self
     
     func to() -> ValueToStore
